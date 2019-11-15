@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 
 
 class Grid:
@@ -16,7 +17,7 @@ class Grid:
     # -1 66 -1 | -1 77 -1 | -1 88 -1
     # -1 -1 -1 | -1 -1 -1 | -1 -1 -1
 
-    grid = np.ones(9, 9) * -1
+    grid = np.zeros(9, 9)
 
     # this method checks if the location is a valid position for the number in the grid
     # loc: a tuple in the form of (row, col)
@@ -66,3 +67,44 @@ class Grid:
                     return False
 
         return True
+
+    # This method prints out the current grid to the console
+    def print_grid(self):
+        for row in range(9):
+            rowBuild = ''
+            for col in range(9):
+                if col == 3 or col == 6:
+                    rowBuild += '|'
+
+                rowBuild += self.grid[row, col] + ' '
+
+            print(rowBuild)
+
+            if row == 3 or row == 6:
+                dashedLine = ''
+                for i in range(21):
+                    dashedLine += '-'
+
+                print(dashedLine)
+
+    # This method outputs the grid to the given file
+    def print_file(self, file_name):
+        with open(file_name) as csvfile:
+            writer = csv.writer(csvfile)
+            for row in range(9):
+                row_str = ''
+                for column in range(9):
+                    row_str += str(self.grid[row, column])
+
+                writer.writerow(row_str)
+
+    # This method parses a grid from the given file
+    def parse_file(self, file_name):
+        with open(file_name) as csvfile:
+            reader = csv.reader(csvfile)
+            rownum = 0
+            for row in reader:
+                self.grid[rownum,:] = [int(datum) for datum in row]
+                rownum += 1
+
+
