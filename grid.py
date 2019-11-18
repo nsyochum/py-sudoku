@@ -19,7 +19,7 @@ class Grid:
     # -1 66 -1 | -1 77 -1 | -1 88 -1
     # -1 -1 -1 | -1 -1 -1 | -1 -1 -1
     def __init__(self):
-        self.grid = np.zeros(9, 9)
+        self.grid = np.zeros((9, 9)).astype(int)
 
     # sets the given location to the given number
     def set_square(self, row, col, num):
@@ -34,7 +34,7 @@ class Grid:
     # num: a number 1-9 to check
     # returns True if this is valid, false otherwise
     def is_valid(self, row, col, num):
-        if (num, row, col) < (1, 1, 1) or (num, row, col) > (9, 9, 9):
+        if (num, row, col) < (1, 0, 0) or (num, row, col) > (9, 8, 8):
             return False
 
         return self.check_row(num, row) and self.check_column(num, col) and self.check_square(row, col, num)
@@ -45,7 +45,7 @@ class Grid:
     # returns True if the number is valid in the row, False otherwise
     def check_row(self, num, row):
         for number in self.grid[row, :]:
-            if number == num:
+            if int(num) == int(number):
                 return False
 
         return True
@@ -55,8 +55,8 @@ class Grid:
     # column: the column to check
     # returns True if the number is valid in the column, False otherwise
     def check_column(self, num, column):
-        for number in self.grif[:, column]:
-            if number == num:
+        for number in self.grid[:, column]:
+            if int(number) == int(num):
                 return False
 
         return True
@@ -66,11 +66,11 @@ class Grid:
     # loc: the location in the square
     # returns True if the number is valid in the square, False otherwise
     def check_square(self, row, col, num):
-        topRow = (row / 3) * 3
-        leftCol = (col / 3) * 3
+        topRow = int(int(row / 3) * 3)
+        leftCol = int(int(col / 3) * 3)
         for rowOffset in range(3):
             for colOffset in range(3):
-                if self.grid[topRow + rowOffset, leftCol + colOffset] == num:
+                if int(self.grid[topRow + rowOffset, leftCol + colOffset]) == int(num):
                     return False
 
         return True
@@ -121,23 +121,24 @@ class Grid:
             rowBuild = ''
             for col in range(9):
                 if col == 3 or col == 6:
-                    rowBuild += '|'
+                    rowBuild += '| '
 
-                rowBuild += self.grid[row, col] + ' '
+                rowBuild += str(self.grid[row, col]) + ' '
 
             print(rowBuild)
 
-            if row == 3 or row == 6:
+            if row == 2 or row == 5:
                 dashedLine = ''
                 for i in range(21):
                     dashedLine += '-'
 
                 print(dashedLine)
+        print()
 
     # This method outputs the grid to the given file
     def print_file(self, file_name):
-        with open(file_name) as csvfile:
-            writer = csv.writer(csvfile)
+        with open(file_name) as csv_file:
+            writer = csv.writer(csv_file)
             for row in range(9):
                 row_str = ''
                 for column in range(9):
@@ -149,9 +150,9 @@ class Grid:
     def parse_file(self, file_name):
         with open(file_name) as csv_file:
             reader = csv.reader(csv_file)
-            rownum = 0
+            row_num = 0
             for row in reader:
-                self.grid[rownum,:] = [int(datum) for datum in row]
-                rownum += 1
+                self.grid[row_num, :] = [int(datum) for datum in row]
+                row_num += 1
 
 
