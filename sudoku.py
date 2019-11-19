@@ -1,4 +1,5 @@
 import sys
+import matplotlib.pyplot as plt
 
 from grid import Grid
 
@@ -14,7 +15,6 @@ def solve(grid):
                             return True
                         else:
                             grid.set_square(row, col, 0)
-
                 return False
     return True
 
